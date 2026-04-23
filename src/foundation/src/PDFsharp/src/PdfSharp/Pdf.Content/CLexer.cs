@@ -249,7 +249,7 @@ namespace PdfSharp.Pdf.Content
                     try
                     {
                         // Try strict UTF-8 first; throws DecoderFallbackException on invalid sequences.
-                        decodedName = new UTF8Encoding(false, true).GetString(bytes);
+                        decodedName = StrictUtf8.GetString(bytes);
                     }
                     catch (DecoderFallbackException)
                     {
@@ -507,6 +507,7 @@ namespace PdfSharp.Pdf.Content
             return Symbol = CSymbol.Real; // CLexer returns "Real" because there is no "LongInteger".
         }
 
+        static readonly UTF8Encoding StrictUtf8 = new(false, true);
         static readonly double[] PowersOf10 = [1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000, 10_000_000_000];
 
         /// <summary>
