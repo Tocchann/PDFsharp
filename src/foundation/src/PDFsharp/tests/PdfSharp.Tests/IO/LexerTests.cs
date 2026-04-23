@@ -284,8 +284,11 @@ namespace PdfSharp.Tests.IO
             byte[] bytes = [(byte)'/', 0xE3, 0x81, (byte)' '];
 
             var lexer = CreateLexerFromBytes(bytes);
-            var act = () => lexer.ScanName();
-            act.Should().NotThrow();
+            var symbol = lexer.ScanName();
+
+            symbol.Should().Be(Symbol.Name);
+            lexer.Token.Should().NotBeNullOrEmpty();
+            lexer.Token.Should().StartWith("/");
         }
 
 #if NET8_0_OR_GREATER
