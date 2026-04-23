@@ -289,15 +289,14 @@ namespace PdfSharp.Tests.IO
         }
 
 #if NET8_0_OR_GREATER
-        [Fact]
+        [SkippableFact]
         public void ScanName_ShiftJIS_name_is_decoded_on_ShiftJIS_default_encoding()
         {
             // This test verifies Shift-JIS decoding when Encoding.Default is CP932.
             // On non-Japanese environments, Encoding.Default may not be CP932 and
             // the decoded string will differ, so we skip this test if CP932 is not the default.
-            var cp932 = System.Text.CodePagesEncodingProvider.Instance.GetEncoding(932)!;
-            if (!Equals(System.Text.Encoding.Default, cp932))
-                return;  // Skip on non-Japanese environments.
+            Skip.If(System.Text.Encoding.Default.CodePage != 932,
+                "Requires Encoding.Default to use code page 932 (Shift-JIS).");
 
             // Shift-JIS encoding of "日本語": 93 FA 96 D1 8C EA
             // ScanName returns the token INCLUDING the leading '/'.
