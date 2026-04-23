@@ -17,6 +17,16 @@ namespace PdfSharp.Pdf.Internal
     /// </summary>
     public static class PdfEncoders
     {
+        static PdfEncoders()
+        {
+#if !NETFRAMEWORK
+            // Register CodePagesEncodingProvider so that legacy encodings like Shift-JIS (CP932),
+            // GBK (CP936), Big5 (CP950), EUC-KR (CP949), etc. are available on all platforms.
+            // On .NET Framework, all code pages are natively available and registration is not needed.
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
+        }
+
         /// <summary>
         /// Gets the PDFsharp specific encoder RawEncoding.
         /// Ray encoding allows wo work with string instead of byte array.
