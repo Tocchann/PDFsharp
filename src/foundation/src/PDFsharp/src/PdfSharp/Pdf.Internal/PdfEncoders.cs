@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Internal;
@@ -60,6 +61,19 @@ namespace PdfSharp.Pdf.Internal
         {
             //[Obsolete("Use AnsiEncoding")]
             get => AnsiEncoding;
+        }
+
+        /// <summary>
+        /// Gets the encoding for the current culture's ANSI code page.
+        /// Falls back to Windows-1252 on platforms without an ANSI code page (e.g. Linux/macOS).
+        /// </summary>
+        public static Encoding CurrentAnsiEncoding
+        {
+            get
+            {
+                var ansiCodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
+                return ansiCodePage != 0 ? Encoding.GetEncoding(ansiCodePage) : AnsiEncoding;
+            }
         }
 
         /// <summary>
