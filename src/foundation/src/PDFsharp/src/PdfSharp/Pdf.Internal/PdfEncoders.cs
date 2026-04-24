@@ -66,15 +66,15 @@ namespace PdfSharp.Pdf.Internal
         /// <summary>
         /// Gets the encoding for the current culture's ANSI code page.
         /// Falls back to Windows-1252 on platforms without an ANSI code page (e.g. Linux/macOS).
+        /// The value is evaluated once on first access and cached for thread-safe reuse.
         /// </summary>
-        public static Encoding CurrentAnsiEncoding
+        public static Encoding CurrentAnsiEncoding => _currentAnsiEncoding.Value;
+
+        static readonly Lazy<Encoding> _currentAnsiEncoding = new(() =>
         {
-            get
-            {
-                var ansiCodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
-                return ansiCodePage != 0 ? Encoding.GetEncoding(ansiCodePage) : AnsiEncoding;
-            }
-        }
+            var ansiCodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
+            return ansiCodePage != 0 ? Encoding.GetEncoding(ansiCodePage) : AnsiEncoding;
+        });
 
         /// <summary>
         /// Gets the PDF DocEncoding encoding.
