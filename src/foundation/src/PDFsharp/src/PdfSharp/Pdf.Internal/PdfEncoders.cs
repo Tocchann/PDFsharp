@@ -26,10 +26,18 @@ namespace PdfSharp.Pdf.Internal
 #if !NETFRAMEWORK
         private static void RegisterCodePages()
         {
+#if NETSTANDARD
+            // netstandard2.0 may run on .NET Framework. In that case, all code pages are
+            // natively available so registration is not needed — skip it at runtime.
+            if (System.Runtime.InteropServices.RuntimeInformation
+                    .FrameworkDescription
+                    .StartsWith(".NET Framework", StringComparison.OrdinalIgnoreCase))
+                return;
+#endif
             // Register CodePagesEncodingProvider so that legacy encodings like Shift-JIS (CP932),
             // GBK (CP936), Big5 (CP950), EUC-KR (CP949), etc. are available on all platforms.
             // On .NET Framework, all code pages are natively available and registration is not needed.
-            Encoding.RegisterProvider( CodePagesEncodingProvider.Instance );
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 #endif
 
