@@ -253,9 +253,8 @@ namespace PdfSharp.Pdf.Content
                     }
                     catch (DecoderFallbackException)
                     {
-                        // Fall back to the OS default ANSI encoding (e.g. CP932 on Japanese Windows).
-                        // CodePagesEncodingProvider is registered in PdfEncoders static constructor.
-                        decodedName = Encoding.Default.GetString(bytes);
+                        // Fallback to ANSI code page encoding if UTF-8 decoding fails.
+                        decodedName = PdfEncoders.AnsiCodepageEncoding.GetString( bytes );
                     }
                     _token.Clear();
                     _token.Append(decodedName);
