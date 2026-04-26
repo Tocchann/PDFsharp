@@ -266,10 +266,8 @@ namespace PdfSharp.Pdf.IO
                     }
                     catch (DecoderFallbackException)
                     {
-                        // Fallback to legacy ANSI encoding, which is the default code page of the current culture.
-                        CultureInfo currentCulture = CultureInfo.CurrentCulture;
-                        var encoding = Encoding.GetEncoding( currentCulture.TextInfo.ANSICodePage);
-                        decodedName = encoding.GetString( bytes );
+                        // Fallback to ANSI code page encoding if UTF-8 decoding fails.
+                        decodedName = PdfEncoders.AnsiCodepageEncoding.GetString( bytes );
                     }
                     _token.Clear();
                     _token.Append(decodedName);
